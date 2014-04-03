@@ -1,0 +1,8 @@
+---
+- name: Creating custom webroot/documentroot
+  hosts: web
+  user: root
+
+  tasks:
+    - name: create /var/www/halfshellhero.com directory
+      file: path=/var/www/halfshellhero.com owner=jclayton mode=0644 state=directory

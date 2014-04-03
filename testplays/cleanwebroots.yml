@@ -1,0 +1,8 @@
+---
+- name: clearing out web root directories
+  hosts: web
+  user: root
+
+  tasks:
+    - name: running rm to clear directories
+      command: rm -rf /var/www/*

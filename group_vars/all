@@ -1,0 +1,10 @@
+---
+# file: /etc/ansible/group_vars/all
+# this file defines vars for all servers in inventory
+nginx_worker_processes: $ansible_processor_count
+web_user: www-data
+
+domains:
+  - halfshellhero.com
+  - foo.com
+  - bar.com

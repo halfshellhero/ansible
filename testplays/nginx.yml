@@ -1,0 +1,41 @@
+---
+- name: install and start nginx
+  hosts: web
+  user: root
+
+  handlers:
+      - include: /etc/ansible/handlers/handlers.yml
+
+  tasks:
+    - name: install nginx for RedHat boxes
+      yum: name=nginx state=latest
+      when: ansible_os_family == "RedHat"
+
+    - name: install nginx for Debian boxes
+      apt: pkg=nginx state=latest update_cache=yes
+      when: ansible_os_family == "Debian"
+    
+    - name: add www-data user
+      user: name=www-data comment="Web Server User" state=present home=/var/www shell=/bin/sh
+
+    - name: drop in main nginx.conf
+      action: template src=/etc/ansible/templates/nginx.conf dest=/etc/nginx/nginx.conf
+      notify:
+        - restart nginx
+
+    - name: drop in individual domain configs
+      action: template src=/etc/ansible/templates/domain_template.conf dest=/etc/nginx/conf.d/{{ item }}.conf
+      with_items: $domains
+      notify:
+        - restart nginx
+
+    - name: create individual web roots
+      file: path=/var/www/{{ item }} state=directory
+      with_items: $domains
+
+    - name: dropping in web content
+      git: repo=https://github.com/halfshellhero/ansible.git dest=/var/www/{{ item }} force=Yes
+      with_items: $domains
+
+    - name: start nginx
+      service: name=nginx state=running enabled=yes

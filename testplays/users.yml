@@ -1,0 +1,11 @@
+---
+- name: Creates users on destination machines
+  hosts: all
+  user: root
+  vars:
+    # Generated using pwgen.py located in /root on this server
+    #jclayton_pass: $6$Vk1kw1Z5uTBGo/rA$jvm/8TkPT31Ur4NB1gRionnCpZGhngSF.1WFeHOgVl.3mBlTmlPlZPk1t5h2qCUzgYaGxud6tfhqjJI.czs/o1
+
+  tasks:
+    - name: Creates jclayton user
+      user: name=jclayton comment="Jon Clayton" uid=510 state=present password={{ jclayton_pass }}

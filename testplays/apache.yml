@@ -1,0 +1,11 @@
+---
+- name: install and start apache
+  hosts: web
+  user: root
+
+  tasks:
+    - name: install httpd
+      yum: name=httpd state=latest
+
+    - name: start httpd
+      service: name=httpd state=running enabled=yes

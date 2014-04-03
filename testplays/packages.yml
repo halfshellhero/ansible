@@ -1,0 +1,13 @@
+---
+- name: install required packages
+  hosts: all
+  user: root
+
+  tasks:
+    - name: install git
+      yum: name=git state=latest
+      when: ansible_os_family == "RedHat"
+
+    - name: install git
+      apt: pkg=git state=latest update_cache=yes
+      when: ansible_os_family == "Debian"

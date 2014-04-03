@@ -1,0 +1,36 @@
+---
+#Same as create_server.yml but with ssh key this time.
+#
+- name: Build a Cloud Server
+  gather_facts: False
+  hosts: localhost
+  tasks:
+    - name: Server build request
+      local_action:
+        module: rax
+        #credentials: ~/.rax_creds
+        name: testingvar
+        flavor: performance1-1
+        image: fd8e4f18-9270-4f43-8932-c3719ae2f7fd
+        files:
+          /root/.ssh/authorized_keys: /root/.ssh/id_rsa.pub
+        wait: yes
+        state: present
+        networks:
+          - private
+          - public
+      register: rax
+
+#    - name: Add newly created server to web group
+#      local_action:
+#          module: add_host
+#          hostname: "{{ item.name }}"
+#          ansible_ssh_host: "{{ item.rax_accessipv4 }}"
+#          ansible_ssh_pass: "{{ item.rax_adminpass }}"
+#          groupname: web
+#      with_items: rax.success
+#      when: rax.action == 'create'
+
+- include: users.yml
+#- include: apache.yml
+#- include: directorycreation.yml

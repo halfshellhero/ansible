@@ -1,0 +1,4 @@
+---
+- name: Play to simply do fact gathering
+  hosts: all
+  gather_facts: true

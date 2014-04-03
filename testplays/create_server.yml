@@ -1,0 +1,18 @@
+---
+- name: Build a Cloud Server
+  gather_facts: False
+  hosts: localhost
+  tasks:
+    - name: Server build request
+      local_action:
+        module: rax
+        credentials: ~/.rax_creds
+        name: rax-test1
+        flavor: performance1-1
+        image: fd8e4f18-9270-4f43-8932-c3719ae2f7fd
+        wait: yes
+        state: present
+        networks:
+          - private
+          - public
+      register: rax
